@@ -30,13 +30,17 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   /**************************************************************************** */
 
   app.get( "/filteredimage", async ( req, res ) => {
-    const imageUrl = req.query.image_url;
-    if (imageUrl) {
-      const imageFilter = await filterImageFromURL(imageUrl);
-      res.sendFile(imageFilter);
-      res.on('finish', function(){
-        deleteLocalFiles([imageFilter]);
-      }); 
+    try {
+      const imageUrl = req.query.image_url;
+      if (imageUrl) {
+        const imageFilter = await filterImageFromURL(imageUrl);
+        res.sendFile(imageFilter);
+        res.on('finish', function(){
+          deleteLocalFiles([imageFilter]);
+        }); 
+      }
+    } catch (error) {
+      throw(error);
     }
   } );
 
